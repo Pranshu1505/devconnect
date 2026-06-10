@@ -29,7 +29,7 @@ const PrivateRoute = ({ children }) => {
 
 const PublicOnly = ({ children }) => {
   const { user } = useAuth();
-  return user ? <Navigate to="/" /> : children;
+  return user ? <Navigate to="/dashboard" /> : children;
 };
 
 export default function App() {
