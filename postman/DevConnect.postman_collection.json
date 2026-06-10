@@ -1,0 +1,301 @@
+{
+  "info": {
+    "name": "DevConnect API",
+    "description": "Developer Community + Job Board — Full API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token", "value": "" },
+    { "key": "postId", "value": "" },
+    { "key": "jobId", "value": "" },
+    { "key": "userId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "Register (Developer)",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json(); if(r.token) pm.collectionVariables.set('token', r.token);"], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Rahul Sharma\",\n  \"email\": \"rahul@example.com\",\n  \"password\": \"password123\",\n  \"role\": \"developer\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Register (Company)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"TechCorp HR\",\n  \"email\": \"hr@techcorp.com\",\n  \"password\": \"password123\",\n  \"role\": \"company\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json(); if(r.token) pm.collectionVariables.set('token', r.token);"], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"rahul@example.com\",\n  \"password\": \"password123\"\n}" },
+            "url": { "raw": "{{baseUrl}}/auth/login", "host": ["{{baseUrl}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/auth/me", "host": ["{{baseUrl}}"], "path": ["auth", "me"] }
+          }
+        },
+        {
+          "name": "GitHub OAuth (open in browser)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/auth/github", "host": ["{{baseUrl}}"], "path": ["auth", "github"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👤 Users",
+      "item": [
+        {
+          "name": "Get Profile by Username",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/rahulsharma123", "host": ["{{baseUrl}}"], "path": ["users", "rahulsharma123"] }
+          }
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"bio\": \"Full Stack Developer | React & Node.js\",\n  \"skills\": [\"JavaScript\", \"React\", \"Node.js\", \"MongoDB\"],\n  \"location\": \"Ghaziabad, UP\",\n  \"githubUrl\": \"https://github.com/rahulsharma\",\n  \"openToWork\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/users/profile", "host": ["{{baseUrl}}"], "path": ["users", "profile"] }
+          }
+        },
+        {
+          "name": "Follow User",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/users/{{userId}}/follow", "host": ["{{baseUrl}}"], "path": ["users", "{{userId}}", "follow"] }
+          }
+        },
+        {
+          "name": "Search Users",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/users/search?q=react", "host": ["{{baseUrl}}"], "path": ["users", "search"], "query": [{ "key": "q", "value": "react" }] }
+          }
+        },
+        {
+          "name": "Get Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/users/notifications", "host": ["{{baseUrl}}"], "path": ["users", "notifications"] }
+          }
+        },
+        {
+          "name": "Mark Notifications Read",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/users/notifications/read", "host": ["{{baseUrl}}"], "path": ["users", "notifications", "read"] }
+          }
+        },
+        {
+          "name": "Get Bookmarks",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/users/bookmarks", "host": ["{{baseUrl}}"], "path": ["users", "bookmarks"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "📝 Posts",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/posts?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["posts"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }] }
+          }
+        },
+        {
+          "name": "Get Posts by Tag",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/posts?tag=react", "host": ["{{baseUrl}}"], "path": ["posts"], "query": [{ "key": "tag", "value": "react" }] }
+          }
+        },
+        {
+          "name": "Search Posts",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/posts?search=javascript tips", "host": ["{{baseUrl}}"], "path": ["posts"], "query": [{ "key": "search", "value": "javascript tips" }] }
+          }
+        },
+        {
+          "name": "Create Post",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json(); if(r.post) pm.collectionVariables.set('postId', r.post._id);"], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Getting Started with MERN Stack in 2024\",\n  \"body\": \"# Introduction\\n\\nMERN stack is one of the most popular...\",\n  \"tags\": [\"mern\", \"javascript\", \"react\", \"nodejs\"],\n  \"coverImage\": \"\",\n  \"series\": \"MERN Beginners Guide\"\n}" },
+            "url": { "raw": "{{baseUrl}}/posts", "host": ["{{baseUrl}}"], "path": ["posts"] }
+          }
+        },
+        {
+          "name": "Get Single Post",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}"] }
+          }
+        },
+        {
+          "name": "Update Post",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Getting Started with MERN Stack (Updated)\",\n  \"tags\": [\"mern\", \"javascript\"]\n}" },
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}"] }
+          }
+        },
+        {
+          "name": "Like Post",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}/like", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}", "like"] }
+          }
+        },
+        {
+          "name": "Bookmark Post",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}/bookmark", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}", "bookmark"] }
+          }
+        },
+        {
+          "name": "Add Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"body\": \"Great article! Really helped me understand the concepts.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}/comments", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}", "comments"] }
+          }
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/posts/{{postId}}", "host": ["{{baseUrl}}"], "path": ["posts", "{{postId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "💼 Jobs",
+      "item": [
+        {
+          "name": "Get All Jobs",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/jobs?page=1&limit=10", "host": ["{{baseUrl}}"], "path": ["jobs"], "query": [{ "key": "page", "value": "1" }, { "key": "limit", "value": "10" }] }
+          }
+        },
+        {
+          "name": "Filter Jobs (Remote + React)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/jobs?remote=true&stack=react,node", "host": ["{{baseUrl}}"], "path": ["jobs"], "query": [{ "key": "remote", "value": "true" }, { "key": "stack", "value": "react,node" }] }
+          }
+        },
+        {
+          "name": "Create Job (Company only)",
+          "event": [{ "listen": "test", "script": { "exec": ["const r = pm.response.json(); if(r.job) pm.collectionVariables.set('jobId', r.job._id);"], "type": "text/javascript" }}],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"title\": \"Senior Full Stack Developer\",\n  \"description\": \"We are looking for an experienced MERN stack developer...\",\n  \"requirements\": [\"3+ years React experience\", \"Node.js & Express\", \"MongoDB\"],\n  \"stack\": [\"react\", \"nodejs\", \"mongodb\", \"typescript\"],\n  \"location\": \"Noida, UP\",\n  \"type\": \"full-time\",\n  \"experience\": \"3-5 years\",\n  \"salaryMin\": 1200000,\n  \"salaryMax\": 1800000,\n  \"currency\": \"INR\",\n  \"isRemote\": true\n}" },
+            "url": { "raw": "{{baseUrl}}/jobs", "host": ["{{baseUrl}}"], "path": ["jobs"] }
+          }
+        },
+        {
+          "name": "Get Single Job",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/jobs/{{jobId}}", "host": ["{{baseUrl}}"], "path": ["jobs", "{{jobId}}"] }
+          }
+        },
+        {
+          "name": "Apply for Job (Developer only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"coverLetter\": \"I am very excited about this opportunity. I have 4 years of MERN stack experience...\"\n}" },
+            "url": { "raw": "{{baseUrl}}/jobs/{{jobId}}/apply", "host": ["{{baseUrl}}"], "path": ["jobs", "{{jobId}}", "apply"] }
+          }
+        },
+        {
+          "name": "Get Applications (Company only)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/jobs/{{jobId}}/applications", "host": ["{{baseUrl}}"], "path": ["jobs", "{{jobId}}", "applications"] }
+          }
+        },
+        {
+          "name": "Update Application Status",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": { "mode": "raw", "raw": "{\n  \"status\": \"shortlisted\"\n}" },
+            "url": { "raw": "{{baseUrl}}/jobs/{{jobId}}/applications/APPLICATION_ID_HERE", "host": ["{{baseUrl}}"], "path": ["jobs", "{{jobId}}", "applications", "APPLICATION_ID_HERE"] }
+          }
+        },
+        {
+          "name": "Delete Job",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/jobs/{{jobId}}", "host": ["{{baseUrl}}"], "path": ["jobs", "{{jobId}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

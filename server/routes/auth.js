@@ -1,0 +1,33 @@
+const express = require("express");
+const passport = require("passport");
+const { body } = require("express-validator");
+const { register, login, githubCallback, getMe } = require("../controllers/authController");
+const { protect } = require("../middleware/authMiddleware");
+
+const router = express.Router();
+
+// Validation rules
+const registerRules = [
+  body("name").trim().notEmpty().withMessage("Name is required"),
+  body("email").isEmail().withMessage("Valid email required"),
+  body("password").isLength({ min: 6 }).withMessage("Password must be at least 6 characters"),
+];
+
+const loginRules = [
+  body("email").isEmail().withMessage("Valid email required"),
+  body("password").notEmpty().withMessage("Password is required"),
+];
+
+router.post("/register", registerRules, register);
+router.post("/login", loginRules, login);
+router.get("/me", protect, getMe);
+
+// GitHub OAuth
+router.get("/github", passport.authenticate("github", { session: false, scope: ["user:email"] }));
+router.get(
+  "/github/callback",
+  passport.authenticate("github", { session: false, failureRedirect: "/login" }),
+  githubCallback
+);
+
+module.exports = router;

@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eff6ff;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+
+  --font-family-sans: "Inter", sans-serif;
+  --font-family-mono: "JetBrains Mono", monospace;
+}
+
+@layer components {
+  .btn-primary {
+    background-color: var(--color-brand-600);
+    color: white;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background-color: var(--color-brand-700);
+  }
+
+  .btn-secondary {
+    border: 1px solid #d1d5db;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .btn-secondary:hover {
+    background-color: #f9fafb;
+  }
+
+  .input {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+  .input:focus {
+    box-shadow: 0 0 0 2px var(--color-brand-500);
+  }
+
+  .card {
+    background-color: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    border: 1px solid #e5e7eb;
+    padding: 1rem;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    display: inline-block;
+  }
+}
