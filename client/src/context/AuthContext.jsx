@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           setUser(res.data.user);
           initSocket(res.data.user._id);
         })
-        .catch(() => localStorage.removeItem("token"))
+        .catch(() => localStorage.removeItem("token")) 
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -33,9 +33,9 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (data) => {
     const res = await authAPI.register(data);
-    localStorage.setItem("token", res.data.token);
-    setUser(res.data.user);
-    initSocket(res.data.user._id);
+    // localStorage.setItem("token", res.data.token);
+    // setUser(res.data.user);
+    // initSocket(res.data.user._id);
     return res.data;
   };
 
